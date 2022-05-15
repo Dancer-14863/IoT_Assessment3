@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "node1-service"
+version = "0.1.0"
+description = "The main service that runs on the first IoT node, responsible for the soil moisture sensor"
+authors = ["Malika Liyanage <alrider12@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyserial = "^3.5"
+asyncio = "^3.4.3"
+SQLAlchemy = "^1.4.36"
+python-dotenv = "^0.20.0"
+PyMySQL = "^1.0.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+start = "node1_service.main:start"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

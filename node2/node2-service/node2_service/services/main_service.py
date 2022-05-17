@@ -33,8 +33,8 @@ class MainService:
                         print("Exiting Program")
                 else:
                     print("Could not connect to device")
-            else:
-                print("No device detected. Exiting program")
+        else:
+            print("No device detected. Exiting program")
                                
     async def __main_process(self):
         while True:

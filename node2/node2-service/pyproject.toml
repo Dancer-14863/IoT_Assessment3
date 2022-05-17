@@ -2,10 +2,15 @@
 name = "node2-service"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Simon <simon_sim88@yahoo.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pyserial = "^3.5"
+asyncio = "^3.4.3"
+SQLAlchemy = "^1.4.36"
+python-dotenv = "^0.20.0"
+PyMySQL = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

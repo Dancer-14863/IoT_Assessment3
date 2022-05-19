@@ -7,7 +7,7 @@ class SensorLog(Base):
 
     id = Column(Integer, primary_key=True)
     sensor_reading = Column(Integer, default=0)
-    reacord_at = Column(TIMESTAMP, server_default=sql.func.now(),)
+    recorded_at = Column(TIMESTAMP, server_default=sql.func.now(),)
 
     def __init__(self, sensor_reading):
         self.sensor_reading = sensor_reading

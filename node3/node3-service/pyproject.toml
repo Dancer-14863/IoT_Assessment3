@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "node3_service"
+version = "0.1.0"
+description = "The main service that runs on the third IoT node, responsible for the water pump"
+authors = ["Hsu Wei Ying <hsuwy011006@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyserial = "^3.5"
+asyncio = "^3.4.3"
+SQLAlchemy = "^1.4.36"
+python-dotenv = "^0.20.0"
+PyMySQL = "^1.0.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+start = "node3_service.main:start"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

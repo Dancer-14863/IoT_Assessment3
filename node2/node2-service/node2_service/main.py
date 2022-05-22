@@ -1,5 +1,5 @@
 from node2_service.services.main_service import MainService
-from node2_service.serivces.database_service import DatabaseService
+from node2_service.services.database_service import DatabaseService
 
 def start():
     database_service = DatabaseService()

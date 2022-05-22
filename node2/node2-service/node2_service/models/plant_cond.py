@@ -5,8 +5,19 @@ class PlantCond(Base):
     __tablename__ = "plant_cond"
     
     id = Column(Integer, primary_key=True)
-    cond = Column(Integer, default=0)
-    timestamp = Column(TIMESTAMP, server_default=sql.func.now(),)
+    sensor_reading = Column(Integer, default=0)
+    status = Column(String(24), default="NORMAL")
+    recorded_at = Column(TIMESTAMP, server_default=sql.func.now(),)
     
-    def __init__(self, cond):
-        self.cond = cond
+    def __init__(self, sensor_reading, status):
+        self.sensor_reading = sensor_reading
+        self.status = status
+        
+    def to_json(self):
+        return {
+            "id": self.id,
+            "sensor_reading": self.sensor_reading,
+            "status": self.status,
+            "recorded_at": self.recorded_at.strftime(
+                "%Y-%m-%d %H:%M:%S"),
+        }

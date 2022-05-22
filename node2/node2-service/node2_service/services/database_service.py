@@ -3,17 +3,22 @@ from node2_service.models.plant_cond import PlantCond
 from node2_service.models.cover_state import CoverState
 
 class DatabaseService:
-    def save_plant_cond(self, condition):
-        session = Session()
-        plant_cond = PlantCond(condition)
-        session.add(plant_cond)
-        session.commit()
-        session.close()
+    session = Session()
+    
+    def save_plant_cond_log(self, reading, status):
+        plant_cond = PlantCond(reading, status)
+        self.session.add(plant_cond)
+        self.session.flush()
+        self.commit_session()
+        self.session.refresh(plant_cond)
+        return plant_cond
         
     def save_cover_state(self, state):
-        session = Session()
         cover_state = CoverState(state)
-        session.add(cover_state)
-        session.commit()
-        session.close()
+        self.session.add(cover_state)
+        self.commit_session()
+        self.session.refresh(cover_state)
+        return cover_state
         
+    def commit_session(self):
+        self.session.commit()

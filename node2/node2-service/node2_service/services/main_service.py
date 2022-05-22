@@ -12,6 +12,7 @@ class MainService:
     arduino = None
     database_service = None
     mqtt_service = None
+    last_recorded_sensor_log = None
     
     device_id = "0002"
     service_start_date_time = datetime.now()
@@ -21,8 +22,7 @@ class MainService:
         self.mqtt_service = mqtt_service
         
     def start(self):
-        #port = find_arduino()
-        port = "/dev/ttyUSB0"
+        port = find_arduino()
         if port != None:
             print("Device detected at", port)
             
@@ -60,24 +60,35 @@ class MainService:
             if (sensor_reading != 0):
                 status = "OVER"
            
-            sensor_log = self.database_service.save_plant_cond_log(sensor_reading, status)
-
-            if (sensor_log.status != "NORMAL"):
-                self.__publish_sensor_log(sensor_log)
+            self.last_recorded_sensor_log = self.database_service.save_plant_cond_log(sensor_reading, status)
+             
+            if (self.last_recorded_sensor_log.status != "NORMAL"):
+                self.__publish_sensor_log(self.last_recorded_sensor_log)
             
             print(f"Sensor Reading: {sensor_reading}")
             
     def __init_subscriptions(self):
         self.mqtt_service.set_base_subscription("node2")
         self.mqtt_service.add_message_callback("get-status", self.__status_callback)
-        #self.mqtt_service.add_message_callback("cover-commands", self.__cover_state_callback)
+        self.mqtt_service.add_message_callback("cover-commands", self.__cover_state_callback)
         
     def __status_callback(self, client, user_data, message):
         self.__publish_status()
     
     def __cover_state_callback(self, client, user_data, message):
         parsed_payload = json.loads(message.payload.decode("utf-8"))
+        received_command = parsed_payload["data"]["cover_command"]
         
+        if (self.last_recorded_sensor_log is not None and self.last_recorded_sensor_log.status == "NORMAL"):
+            command = Commands.NO_COVER
+            if (received_command == "PARTIAL_COVER"):
+                command = Commands.PARTIAL_COVER
+            elif (received_command == "FULL_COVER"):
+                command = Commands.FULL_COVER
+
+            cover_state = self.database_service.save_cover_state(received_command)
+            send_command_arduino(self.arduino, command)
+            self.__publish_cover_state(cover_state)
         
     def __publish_status(self):
         date_time_string = self.service_start_date_time.strftime(
@@ -96,5 +107,11 @@ class MainService:
             'data': sensor_log.to_json(),
         }
         self.mqtt_service.publish(
-            'notifications', json.dumps(response_object))
-            
+            'notifications/height', json.dumps(response_object))
+    
+    def __publish_cover_state(self, cover_state):
+        response_object = {
+            "data": cover_state.to_json()
+        }
+        self.mqtt_service.publish(
+            "notifications/cover", json.dumps(response_object))

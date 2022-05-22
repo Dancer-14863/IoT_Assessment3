@@ -24,7 +24,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Tempestas API. The backend API for IoT Assessment 3.
 
 ## Installation
 

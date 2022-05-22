@@ -32,7 +32,8 @@ class MQTTService:
         username = os.getenv('MQTT_USERNAME')
         password = os.getenv('MQTT_PASSWORD')
         client_id = 'node2-connection'
-
+        print(broker)
+        print(port)
         self.client = paho.Client(client_id)
         self.client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
         self.client.username_pw_set(username, password)

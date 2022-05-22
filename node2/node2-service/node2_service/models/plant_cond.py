@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, TIMESTAMP, sql
+from email.policy import default
+from sqlalchemy import Column, Integer, String, TIMESTAMP, sql
 from node2_service.models.base import Base
 
 class PlantCond(Base):

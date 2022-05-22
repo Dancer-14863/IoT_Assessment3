@@ -5,7 +5,7 @@ from node2_service.models.cover_state import CoverState
 class DatabaseService:
     def save_plant_cond(self, condition):
         session = Session()
-        plant_cond = PlantCond(condtion)
+        plant_cond = PlantCond(condition)
         session.add(plant_cond)
         session.commit()
         session.close()

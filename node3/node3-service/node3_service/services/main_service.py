@@ -1,5 +1,5 @@
 from node3_service.services.database_service import DatabaseService
-from node3_service.utils.arduino_helpers import find_arduino
+from node3_service.utils.arduino_helpers import find_arduino, send_command_arduino
 from node3_service.services.mqtt_service import MQTTService
 from node3_service.utils.commands import Commands
 from datetime import datetime
@@ -17,6 +17,10 @@ class MainService:
 
     device_id = '0003'
     service_start_date_time = datetime.now()
+
+    is_water_pump_on = False
+    litres_to_pump = 0.0
+    seconds_to_pump = 0
 
     def __init__(self, database_service: DatabaseService, mqtt_service: MQTTService):
         self.database_service = database_service
@@ -53,7 +57,16 @@ class MainService:
 
     async def __main_process(self):
         while True:
-            await asyncio.sleep(10)
+            if (self.is_water_pump_on):
+                send_command_arduino(
+                    self.arduino, Commands.ACTIVATE_WATER_PUMP)
+                await asyncio.sleep(self.seconds_to_pump)
+                water_pump_log = self.database_service.save_water_pump_log(
+                    self.litres_to_pump, self.seconds_to_pump)
+                send_command_arduino(
+                    self.arduino, Commands.DEACTIVATE_WATER_PUMP)
+                self.__publish_water_pump_log(water_pump_log)
+                self.is_water_pump_on = False
 
     def __get_configuration(self):
         self.configuration = self.database_service.get_latest_configuration()
@@ -64,6 +77,8 @@ class MainService:
             'get-status', self.__status_callback)
         self.mqtt_service.add_message_callback(
             'update-configuration', self.__configuration_callback)
+        self.mqtt_service.add_message_callback(
+            'water-pump-commands', self.__water_pump_commands_callback)
 
     def __status_callback(self, client, user_data, message):
         self.__publish_status()
@@ -84,3 +99,29 @@ class MainService:
             }
         }
         self.mqtt_service.publish('status', json.dumps(response_object))
+
+    def __water_pump_commands_callback(self, client, user_data, message):
+        parsed_payload = json.loads(message.payload.decode('utf-8'))
+        self.litres_to_pump = float(parsed_payload['data']['litres_to_pump'])
+        self.seconds_to_pump = (self.litres_to_pump /
+                                self.configuration.litre_per_min) * 60
+
+        if (self.is_water_pump_on):
+            self.__publish_error_notification()
+        else:
+            self.is_water_pump_on = True
+
+    def __publish_error_notification(self):
+        response_object = {
+            'data': {
+                'message': 'Water Pump is already pumping!',
+            }
+        }
+        self.mqtt_service.publish('notifications/error', json.dumps(response_object))
+
+    def __publish_water_pump_log(self, water_pump_log):
+        response_object = {
+            'data': water_pump_log.to_json()
+        }
+        self.mqtt_service.publish(
+            'notifications/log', json.dumps(response_object))

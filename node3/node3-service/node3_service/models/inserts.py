@@ -6,7 +6,7 @@ from node3_service.models.configuration import Configuration
 Base.metadata.create_all(Engine)
 session = Session()
 
-configuration = Configuration(1)
+configuration = Configuration(10)
 session.add(configuration)
 
 session.commit()

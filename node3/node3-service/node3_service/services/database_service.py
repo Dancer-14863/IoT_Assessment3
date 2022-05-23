@@ -6,8 +6,8 @@ from node3_service.models.configuration import Configuration
 class DatabaseService:
     session = Session()
 
-    def save_water_pump_log(self, status):
-        water_pump_log = WaterPumpLog(status)
+    def save_water_pump_log(self, pumped_litres, pump_duration):
+        water_pump_log = WaterPumpLog(pumped_litres, pump_duration)
         self.session.add(water_pump_log)
         self.session.flush()
         self.commit_session()

@@ -7,14 +7,14 @@ enum commands
 };
 
 void setup() {
-  // put your setup code here, to run once:
   pinMode(relayPin, OUTPUT);
+  digitalWrite(relayPin, HIGH);
   Serial.begin(9600);
 }
 
 void loop() {
   if (Serial.available() > 0)
-  { 
+  {
     int command = Serial.read();
 
     switch (command)

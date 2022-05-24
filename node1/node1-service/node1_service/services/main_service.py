@@ -111,4 +111,4 @@ class MainService:
             'data': sensor_log.to_json(),
         }
         self.mqtt_service.publish(
-            'notifications', json.dumps(response_object))
+            'notifications/logs', json.dumps(response_object))

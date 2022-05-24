@@ -67,6 +67,17 @@ python-versions = ">=3.6"
 pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
+name = "paho-mqtt"
+version = "1.6.1"
+description = "MQTT version 5.0/3.1.1 client class"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+proxy = ["pysocks"]
+
+[[package]]
 name = "pluggy"
 version = "0.13.1"
 description = "plugin and hook calling mechanisms for python"
@@ -195,7 +206,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "3080d7d4eb08089871114b0e23f0f85425f1456dfc0be0253f6d4787ebf1a857"
+content-hash = "021dd25471a46069b7c7075ada4bf0e1f1897e04e7af962852fce5e0634815ac"
 
 [metadata.files]
 asyncio = [
@@ -280,6 +291,9 @@ more-itertools = [
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},
     {file = "packaging-21.3.tar.gz", hash = "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb"},
+]
+paho-mqtt = [
+    {file = "paho-mqtt-1.6.1.tar.gz", hash = "sha256:2a8291c81623aec00372b5a85558a372c747cbca8e9934dfe218638b8eefc26f"},
 ]
 pluggy = [
     {file = "pluggy-0.13.1-py2.py3-none-any.whl", hash = "sha256:966c145cd83c96502c3c3868f50408687b38434af77734af1e9ca461a4081d2d"},

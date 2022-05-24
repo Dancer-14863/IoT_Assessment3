@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "weather-lambda"
+version = "0.1.0"
+description = ""
+authors = ["Simon2K <simon_sim88@yahoo.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.27.1"
+SQLAlchemy = "^1.4.36"
+paho-mqtt = "^1.6.1"
+python-dotenv = "^0.20.0"
+PyMySQL = "^1.0.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+start = "weather_lambda.main:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

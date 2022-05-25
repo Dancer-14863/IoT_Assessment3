@@ -48,4 +48,11 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  env: {
+    mqttBroker: process.env.MQTT_BROKER,
+    mqttPort: process.env.MQTT_PORT,
+    mqttUsername: process.env.MQTT_USERNAME,
+    mqttPassword: process.env.MQTT_PASSWORD,
+  },
 }

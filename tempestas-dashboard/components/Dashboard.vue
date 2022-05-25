@@ -6,10 +6,14 @@
         <Overview />
       </b-tab-item>
       <b-tab-item label="Node 1">
-		  <Node1Section />
-	  </b-tab-item>
-      <b-tab-item label="Node 2"></b-tab-item>
-      <b-tab-item label="Node 3"></b-tab-item>
+		    <Node1Section />
+	    </b-tab-item>
+      <b-tab-item label="Node 2">
+        <Node2Section />
+      </b-tab-item>
+      <b-tab-item label="Node 3">
+        <Node3Section />
+      </b-tab-item>
     </b-tabs>
   </main>
 </template>

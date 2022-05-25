@@ -5,7 +5,9 @@
       <b-tab-item label="Overview">
         <Overview />
       </b-tab-item>
-      <b-tab-item label="Node 1"></b-tab-item>
+      <b-tab-item label="Node 1">
+		  <Node1Section />
+	  </b-tab-item>
       <b-tab-item label="Node 2"></b-tab-item>
       <b-tab-item label="Node 3"></b-tab-item>
     </b-tabs>

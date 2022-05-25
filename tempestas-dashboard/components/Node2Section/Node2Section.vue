@@ -2,32 +2,26 @@
   <div>
     <div class="py-2 columns is-variable is-5">
       <div class="column is-4">
-        <Node1Card />
+        <Node2Card />
       </div>
       <div class="column is-6">
-        <h1 class="is-size-4">Configuration</h1>
+        <h1 class="is-size-4">Manual Control</h1>
         <b-field label="Cover Mode" class="mt-4">
-            <section>
-                <div class="block">
-                    <b-radio v-model="radio"
-                        name="name"
-                        native-value="Disabled">
-                        Disabled
-                    </b-radio>
-                    <b-radio v-model="radio"
-                        name="name"
-                        native-value="Partial">
-                        Partial
-                    </b-radio>
-                    <b-radio v-model="radio"
-                        name="name"
-                        native-value="Full">
-                        Full
-                    </b-radio>
-                </div>
-            </section>
+          <section>
+            <div class="block">
+              <b-radio v-model="coverMode" name="name" native-value="None">
+                None
+              </b-radio>
+              <b-radio v-model="coverMode" name="name" native-value="Partial">
+                Partial
+              </b-radio>
+              <b-radio v-model="coverMode" name="name" native-value="Full">
+                Full
+              </b-radio>
+            </div>
+          </section>
         </b-field>
-        <b-button type="is-success" class="mt-4">Update Configuration</b-button>
+        <b-button type="is-success" class="mt-4" outlined>Change Cover</b-button>
       </div>
     </div>
   </div>
@@ -41,8 +35,8 @@ export default Vue.extend({
   components: { Node2Card },
   data() {
     return {
-         radio: 'Disabled'
-        }
+      coverMode: '',
     }
+  },
 })
 </script>

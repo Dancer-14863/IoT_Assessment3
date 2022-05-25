@@ -11,17 +11,17 @@
       </div>
       <div class="content">
         <div class="is-flex is-justify-content-space-between">
-			<p class="has-text-weight-bold">Device ID</p>
-			<p>0003</p>
-		</div>
+          <p class="has-text-weight-bold">Device ID</p>
+          <p>0003</p>
+        </div>
         <div class="is-flex is-justify-content-space-between">
-			<p class="has-text-weight-bold">Last Online</p>
-			<p>25/05/2022</p>
-		</div>
+          <p class="has-text-weight-bold">Last Online</p>
+          <p>25/05/2022</p>
+        </div>
         <div class="is-flex is-justify-content-space-between">
-			<p class="has-text-weight-bold">Last Recorded Status</p>
-			<p>UP</p>
-		</div>
+          <p class="has-text-weight-bold">Last Recorded Status</p>
+          <p>UP</p>
+        </div>
       </div>
     </div>
   </div>

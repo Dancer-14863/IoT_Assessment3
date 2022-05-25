@@ -5,13 +5,21 @@
         <Node3Card />
       </div>
       <div class="column is-6">
-        <h1 class="is-size-4">Configuration</h1>
-        <b-field label="Water Pump Status" class="mt-4">
-         <b-switch size="is-medium" :value="true"
-            type="is-success">
-            </b-switch>
-        </b-field>
-        <b-button type="is-success" class="mt-4">Update Configuration</b-button>
+        <div>
+          <h1 class="is-size-4">Configuration</h1>
+          <b-field label="Litres to pump per minute" class="mt-4">
+            <b-numberinput min="0" max="15"> </b-numberinput>
+          </b-field>
+          <b-button type="is-success" class="mt-4"
+            >Update Configuration</b-button
+          >
+        </div>
+        <div class="mt-5">
+          <h1 class="is-size-4">Manual Control</h1>
+          <b-button type="is-success" class="mt-4" outlined
+            >Turn Water Pump On</b-button
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -25,5 +33,4 @@ export default Vue.extend({
   name: 'Node3Section',
   components: { Node3Card },
 })
-
 </script>

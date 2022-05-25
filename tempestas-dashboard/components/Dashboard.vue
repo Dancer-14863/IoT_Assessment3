@@ -2,7 +2,9 @@
   <main class="mx-6 my-4">
     <h1 class="is-size-3 has-text-weight-bold">Dashboard</h1>
     <b-tabs type="is-boxed" class="mt-4">
-      <b-tab-item label="Overview"></b-tab-item>
+      <b-tab-item label="Overview">
+        <Overview />
+      </b-tab-item>
       <b-tab-item label="Node 1"></b-tab-item>
       <b-tab-item label="Node 2"></b-tab-item>
       <b-tab-item label="Node 3"></b-tab-item>

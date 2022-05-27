@@ -3,6 +3,7 @@ import { Client } from 'paho-mqtt'
 import { showToast } from '~/utils/toast_helpers'
 import { NodeStatusDTO } from '~/dto/node_status_dto'
 import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
+import { WeatherDataDTO } from '~/dto/weather_data_dto'
 
 export const state = () => ({
   client: {} as Client,
@@ -10,6 +11,7 @@ export const state = () => ({
   node1Status: {} as NodeStatusDTO,
   node2Status: {} as NodeStatusDTO,
   node1Configuration: {} as Node1ConfigurationDTO,
+  weatherData: {} as WeatherDataDTO,
 })
 
 export type MQTTModuleState = ReturnType<typeof state>
@@ -31,6 +33,9 @@ export const mutations: MutationTree<MQTTModuleState> = {
   },
   setNode1Configuration: (state, node1Configuration) => {
     state.node1Configuration = node1Configuration
+  },
+  setWeatherData: (state, weatherData) => {
+    state.weatherData = weatherData
   },
 }
 
@@ -63,6 +68,7 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
     state.client.subscribe('website/#')
     state.client.subscribe('node1/#')
     state.client.subscribe('node2/#')
+    state.client.subscribe('weather/#')
 
     state.client.onConnectionLost = (responseObject) => {
       if (responseObject.errorCode !== 0) {
@@ -76,6 +82,11 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
     state.client.onMessageArrived = (message) => {
       let parsedData
       switch (message.destinationName) {
+        case 'weather/latest':
+          parsedData = JSON.parse(message.payloadString)
+          commit('setWeatherData', parsedData.data as WeatherDataDTO)
+          showToast('Weather Data has been updated', 'is-info')
+          break
         case 'node1/status':
           parsedData = JSON.parse(message.payloadString)
           commit('setNode1Status', parsedData.data as NodeStatusDTO)

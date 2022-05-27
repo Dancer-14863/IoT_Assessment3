@@ -1,12 +1,7 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
-import { Client } from 'paho-mqtt'
-import { showToast } from '~/utils/toast_helpers'
-import { NodeStatusDTO } from '~/dto/node_status_dto'
 import { $axios } from '~/utils/api'
-import { is } from '@babel/types'
 import { MQTTModuleState } from './mqtt'
 import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
-import { response } from 'express'
 
 export const state = () => ({
   isLoading: false,

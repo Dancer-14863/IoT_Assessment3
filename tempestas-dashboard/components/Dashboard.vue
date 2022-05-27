@@ -30,7 +30,10 @@ export default Vue.extend({
     },
   },
   async beforeMount() {
-    await this.$store.dispatch('node1/fetchConfiguration')
+    await Promise.all([
+      this.$store.dispatch('node1/fetchConfiguration'),
+      this.$store.dispatch('weather/fetchLatestWeatherData'),
+    ])
     this.$store.dispatch('mqtt/connect')
   },
 })

@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Node1Configuration } from './node1/entities/node1-configuration.entity';
 import { Node1SensorLog } from './node1/entities/node1-sensor-log.entity';
 import { Node1Module } from './node1/node1.module';
+import { WeatherData } from './weather/entities/weather-data.entity';
+import { WeatherModule } from './weather/weather.module';
 
 @Module({
   imports: [
@@ -18,12 +20,13 @@ import { Node1Module } from './node1/node1.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         port: configService.get<number>('DB_PORT'),
-        entities: [Node1Configuration, Node1SensorLog],
+        entities: [Node1Configuration, Node1SensorLog, WeatherData],
         synchronize: true,
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     Node1Module,
+    WeatherModule,
   ],
   providers: [
     {

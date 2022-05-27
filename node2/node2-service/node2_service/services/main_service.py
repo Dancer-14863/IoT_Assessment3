@@ -55,20 +55,7 @@ class MainService:
     async def __main_process(self):
         while True:
             await asyncio.sleep(10)
-            sensor_reading = int(make_transaction(
-                self.arduino, Commands.GET_SENSOR_READING))
-
-            status = "NORMAL"
-            if (sensor_reading != 0):
-                status = "OVER"
-
-            self.last_recorded_sensor_log = self.database_service.save_plant_cond_log(
-                sensor_reading, status)
-
-            if (self.last_recorded_sensor_log.status != "NORMAL"):
-                self.__publish_sensor_log(self.last_recorded_sensor_log)
-
-            print(f"Sensor Reading: {sensor_reading}")
+            self.__get_sensor_reading()
 
     def __init_subscriptions(self):
         self.mqtt_service.set_base_subscription("node2")
@@ -77,6 +64,22 @@ class MainService:
         self.mqtt_service.add_message_callback(
             "cover-commands", self.__cover_state_callback)
 
+    def __get_sensor_reading(self):
+        sensor_reading = int(make_transaction(
+            self.arduino, Commands.GET_SENSOR_READING))
+
+        status = "NORMAL"
+        if (sensor_reading != 0):
+            status = "OVER"
+
+        self.last_recorded_sensor_log = self.database_service.save_plant_cond_log(
+            sensor_reading, status)
+
+        if (self.last_recorded_sensor_log.status != "NORMAL"):
+            self.__publish_sensor_log(self.last_recorded_sensor_log)
+
+        print(f"Sensor Reading: {sensor_reading}")
+
     def __status_callback(self, client, user_data, message):
         self.__publish_status()
 
@@ -84,6 +87,7 @@ class MainService:
         parsed_payload = json.loads(message.payload.decode("utf-8"))
         received_command = parsed_payload["data"]["cover_command"]
 
+        self.__get_sensor_reading()
         if (self.last_recorded_sensor_log is None or
                 (self.last_recorded_sensor_log is not None
                  and self.last_recorded_sensor_log.status == "NORMAL")):

@@ -32,6 +32,7 @@ export default Vue.extend({
   async beforeMount() {
     await Promise.all([
       this.$store.dispatch('node1/fetchConfiguration'),
+      this.$store.dispatch('node3/fetchConfiguration'),
       this.$store.dispatch('weather/fetchLatestWeatherData'),
     ])
     this.$store.dispatch('mqtt/connect')

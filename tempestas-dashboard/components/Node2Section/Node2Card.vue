@@ -17,7 +17,7 @@
           <p>{{ node2Status.device_id }}</p>
         </div>
         <div class="is-flex is-justify-content-space-between">
-          <p class="has-text-weight-bold">Last Online</p>
+          <p class="has-text-weight-bold">Online Since</p>
           <p>{{ node2Status.up_date_time }}</p>
         </div>
         <div class="is-flex is-justify-content-space-between">

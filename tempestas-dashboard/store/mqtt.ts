@@ -3,6 +3,7 @@ import { Client } from 'paho-mqtt'
 import { showToast } from '~/utils/toast_helpers'
 import { NodeStatusDTO } from '~/dto/node_status_dto'
 import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
+import { Node3ConfigurationDTO } from '~/dto/node3_configuration_dto'
 import { WeatherDataDTO } from '~/dto/weather_data_dto'
 
 export const state = () => ({
@@ -10,7 +11,9 @@ export const state = () => ({
   isConnected: false,
   node1Status: {} as NodeStatusDTO,
   node2Status: {} as NodeStatusDTO,
+  node3Status: {} as NodeStatusDTO,
   node1Configuration: {} as Node1ConfigurationDTO,
+  node3Configuration: {} as Node3ConfigurationDTO,
   weatherData: {} as WeatherDataDTO,
 })
 
@@ -31,8 +34,14 @@ export const mutations: MutationTree<MQTTModuleState> = {
   setNode2Status: (state, node2Status) => {
     state.node2Status = node2Status
   },
+  setNode3Status: (state, node3Status) => {
+    state.node3Status = node3Status
+  },
   setNode1Configuration: (state, node1Configuration) => {
     state.node1Configuration = node1Configuration
+  },
+  setNode3Configuration: (state, node3Configuration) => {
+    state.node3Configuration = node3Configuration
   },
   setWeatherData: (state, weatherData) => {
     state.weatherData = weatherData
@@ -68,6 +77,7 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
     state.client.subscribe('website/#')
     state.client.subscribe('node1/#')
     state.client.subscribe('node2/#')
+    state.client.subscribe('node3/#')
     state.client.subscribe('weather/#')
 
     state.client.onConnectionLost = (responseObject) => {
@@ -101,6 +111,21 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
           parsedData = JSON.parse(message.payloadString)
           showToast(parsedData.message, 'is-danger')
           break
+        case 'node3/status':
+          parsedData = JSON.parse(message.payloadString)
+          commit('setNode3Status', parsedData.data as NodeStatusDTO)
+          showToast('Water Pump Node status has been updated')
+          break
+        case 'node3/notifications/logs':
+          parsedData = JSON.parse(message.payloadString)
+          showToast(
+            `Water pump has finished pumping ${parsedData.data.pumped_litres} litre(s)`
+          )
+          break
+        case 'node3/notifications/error':
+          parsedData = JSON.parse(message.payloadString)
+          showToast(parsedData.data.message, 'is-danger')
+          break
       }
     }
   },
@@ -111,6 +136,10 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
 
   getNode2Status: ({ state }) => {
     state.client.send('node2/get-status', '')
+  },
+
+  getNode3Status: ({ state }) => {
+    state.client.send('node3/get-status', '')
   },
 
   updateNode1Configuration: ({ state }, configuration) => {
@@ -127,5 +156,21 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
       JSON.stringify({ data: { cover_command: command } })
     )
     showToast('Command Sent')
+  },
+
+  sendNode3WaterPumpCommand: ({ state }, litres) => {
+    state.client.send(
+      'node3/water-pump-commands',
+      JSON.stringify({ data: { litres_to_pump: litres } })
+    )
+    showToast('Command Sent')
+  },
+
+  updateNode3Configuration: ({ state }, configuration) => {
+    state.client.send(
+      'node3/update-configuration',
+      JSON.stringify({ data: configuration })
+    )
+    showToast('Configuration updated.')
   },
 }

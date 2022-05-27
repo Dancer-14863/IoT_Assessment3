@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MqttClient } from 'mqtt';
@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { WeatherData } from './entities/weather-data.entity';
 
 @Injectable()
-export class WeatherService {
+export class WeatherService implements OnModuleInit {
   private client: MqttClient;
   constructor(
     @InjectRepository(WeatherData)

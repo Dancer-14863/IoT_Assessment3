@@ -10,6 +10,9 @@ import { WeatherModule } from './weather/weather.module';
 import { Node2Module } from './node2/node2.module';
 import { Node2CoverLog } from './node2/entities/node2-cover-log.entity';
 import { Node2HeightLog } from './node2/entities/node2-height-log.entity';
+import { Node3Configuration } from './node3/entities/node3-configuration.entity';
+import { Node3WaterPumpLog } from './node3/entities/node3-water-pump-log.entity';
+import { Node3Module } from './node3/node3.module';
 
 @Module({
   imports: [
@@ -23,7 +26,15 @@ import { Node2HeightLog } from './node2/entities/node2-height-log.entity';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         port: configService.get<number>('DB_PORT'),
-        entities: [Node1Configuration, Node1SensorLog, WeatherData, Node2CoverLog, Node2HeightLog],
+        entities: [
+          Node1Configuration,
+          Node1SensorLog,
+          WeatherData,
+          Node2CoverLog,
+          Node2HeightLog,
+          Node3Configuration,
+          Node3WaterPumpLog,
+        ],
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -31,6 +42,7 @@ import { Node2HeightLog } from './node2/entities/node2-height-log.entity';
     Node1Module,
     WeatherModule,
     Node2Module,
+    Node3Module,
   ],
   providers: [
     {

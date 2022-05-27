@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MqttClient } from 'mqtt';
@@ -9,7 +9,7 @@ import { Node2CoverLog } from './entities/node2-cover-log.entity';
 import { Node2HeightLog } from './entities/node2-height-log.entity';
 
 @Injectable()
-export class Node2Service {
+export class Node2Service implements OnModuleInit {
   private client: MqttClient;
   constructor(
     @InjectRepository(Node2HeightLog)

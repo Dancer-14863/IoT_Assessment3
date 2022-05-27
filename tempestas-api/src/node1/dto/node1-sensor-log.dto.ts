@@ -1,7 +1,8 @@
-import { IsDate, IsNotEmpty, IsString } from 'class-validator';
+import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class Node1SensorLogDTO {
   @IsNotEmpty()
+  @IsNumber()
   sensor_reading: number;
 
   @IsNotEmpty()

@@ -9,19 +9,29 @@
         <b-field label="Cover Mode" class="mt-4">
           <section>
             <div class="block">
-              <b-radio v-model="coverMode" name="name" native-value="None">
+              <b-radio v-model="coverMode" name="name" native-value="NO_COVER">
                 None
               </b-radio>
-              <b-radio v-model="coverMode" name="name" native-value="Partial">
+              <b-radio
+                v-model="coverMode"
+                name="name"
+                native-value="PARTIAL_COVER"
+              >
                 Partial
               </b-radio>
-              <b-radio v-model="coverMode" name="name" native-value="Full">
+              <b-radio
+                v-model="coverMode"
+                name="name"
+                native-value="FULL_COVER"
+              >
                 Full
               </b-radio>
             </div>
           </section>
         </b-field>
-        <b-button type="is-success" class="mt-4" outlined>Change Cover</b-button>
+        <b-button type="is-success" class="mt-4" outlined @click="sendNode2CoverCommand"
+          >Change Cover</b-button
+        >
       </div>
     </div>
   </div>
@@ -37,6 +47,11 @@ export default Vue.extend({
     return {
       coverMode: '',
     }
+  },
+  methods: {
+    sendNode2CoverCommand() {
+      this.$store.dispatch('mqtt/sendNode2CoverCommand', this.coverMode)
+    },
   },
 })
 </script>

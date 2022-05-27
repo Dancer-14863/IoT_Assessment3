@@ -8,6 +8,7 @@ export const state = () => ({
   client: {} as Client,
   isConnected: false,
   node1Status: {} as NodeStatusDTO,
+  node2Status: {} as NodeStatusDTO,
   node1Configuration: {} as Node1ConfigurationDTO,
 })
 
@@ -24,6 +25,9 @@ export const mutations: MutationTree<MQTTModuleState> = {
   },
   setNode1Status: (state, node1Status) => {
     state.node1Status = node1Status
+  },
+  setNode2Status: (state, node2Status) => {
+    state.node2Status = node2Status
   },
   setNode1Configuration: (state, node1Configuration) => {
     state.node1Configuration = node1Configuration
@@ -58,6 +62,7 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
   _onConnect: ({ state, commit }) => {
     state.client.subscribe('website/#')
     state.client.subscribe('node1/#')
+    state.client.subscribe('node2/#')
 
     state.client.onConnectionLost = (responseObject) => {
       if (responseObject.errorCode !== 0) {
@@ -69,11 +74,21 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
     }
 
     state.client.onMessageArrived = (message) => {
+      let parsedData
       switch (message.destinationName) {
         case 'node1/status':
-          const parsedData = JSON.parse(message.payloadString)
+          parsedData = JSON.parse(message.payloadString)
           commit('setNode1Status', parsedData.data as NodeStatusDTO)
           showToast('Soil Moisture Node status has been updated')
+          break
+        case 'node2/status':
+          parsedData = JSON.parse(message.payloadString)
+          commit('setNode2Status', parsedData.data as NodeStatusDTO)
+          showToast('Plant Cover Node status has been updated')
+          break
+        case 'node2/notifications/error':
+          parsedData = JSON.parse(message.payloadString)
+          showToast(parsedData.message, 'is-danger')
           break
       }
     }
@@ -83,11 +98,23 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
     state.client.send('node1/get-status', '')
   },
 
+  getNode2Status: ({ state }) => {
+    state.client.send('node2/get-status', '')
+  },
+
   updateNode1Configuration: ({ state }, configuration) => {
     state.client.send(
       'node1/update-configuration',
       JSON.stringify({ data: configuration })
     )
     showToast('Configuration updated.')
+  },
+
+  sendNode2CoverCommand: ({ state }, command) => {
+    state.client.send(
+      'node2/cover-commands',
+      JSON.stringify({ data: { cover_command: command } })
+    )
+    showToast('Command Sent')
   },
 }

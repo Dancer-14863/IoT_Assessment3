@@ -6,6 +6,6 @@ export const showToast = (message: string, type = 'is-success') => {
     type: type,
     pauseOnHover: true,
     queue: true,
-    position: 'is-top',
+    position: 'is-bottom',
   })
 }

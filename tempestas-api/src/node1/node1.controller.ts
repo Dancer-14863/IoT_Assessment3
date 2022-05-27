@@ -14,7 +14,7 @@ export class Node1Controller {
   constructor(private readonly node1Service: Node1Service) {}
 
   @MessagePattern('node1/notifications/logs')
-  getLogs(@Payload() data: Node1SensorLogDTO, @Ctx() context: MqttContext) {
+  getLogsFromNotifications(@Payload() data: Node1SensorLogDTO, @Ctx() context: MqttContext) {
     return this.node1Service.saveNode1SensorLog(data);
   }
 

@@ -1,21 +1,36 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import { Client } from 'paho-mqtt'
+import { showToast } from '~/utils/toast_helpers'
+import { NodeStatusDTO } from '~/dto/node_status_dto'
+import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
 
 export const state = () => ({
   client: {} as Client,
+  isConnected: false,
+  node1Status: {} as NodeStatusDTO,
+  node1Configuration: {} as Node1ConfigurationDTO,
 })
 
-export type RootState = ReturnType<typeof state>
+export type MQTTModuleState = ReturnType<typeof state>
 
-export const getters: GetterTree<RootState, RootState> = {}
+export const getters: GetterTree<MQTTModuleState, MQTTModuleState> = {}
 
-export const mutations: MutationTree<RootState> = {
+export const mutations: MutationTree<MQTTModuleState> = {
   setClient: (state, client) => {
     state.client = client
   },
+  setIsConnected: (state, isConnected) => {
+    state.isConnected = isConnected
+  },
+  setNode1Status: (state, node1Status) => {
+    state.node1Status = node1Status
+  },
+  setNode1Configuration: (state, node1Configuration) => {
+    state.node1Configuration = node1Configuration
+  },
 }
 
-export const actions: ActionTree<RootState, RootState> = {
+export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
   connect: ({ commit, dispatch }) => {
     const clientId = `website-${Math.random() * 100}`
     const client = new Client(
@@ -30,15 +45,49 @@ export const actions: ActionTree<RootState, RootState> = {
       useSSL: true,
       onSuccess: () => {
         commit('setClient', client)
-        dispatch('_initSubscriptions')
+        dispatch('_onConnect')
+        commit('setIsConnected', true)
+        showToast('Connected to MQTT Broker')
       },
       onFailure: () => {
-        console.error('Could not connect to MQTT broker')
+        showToast('Could not connect to MQTT Broker', 'is-error')
       },
     })
   },
 
-  _initSubscriptions: ({ state }) => {
-    state.client.subscribe('website')
+  _onConnect: ({ state, commit }) => {
+    state.client.subscribe('website/#')
+    state.client.subscribe('node1/#')
+
+    state.client.onConnectionLost = (responseObject) => {
+      if (responseObject.errorCode !== 0) {
+        showToast(
+          `Connection to MQTT Broker lost: ${responseObject.errorMessage}`,
+          'is-error'
+        )
+      }
+    }
+
+    state.client.onMessageArrived = (message) => {
+      switch (message.destinationName) {
+        case 'node1/status':
+          const parsedData = JSON.parse(message.payloadString)
+          commit('setNode1Status', parsedData.data as NodeStatusDTO)
+          showToast('Soil Moisture Node status has been updated')
+          break
+      }
+    }
+  },
+
+  getNode1Status: ({ state }) => {
+    state.client.send('node1/get-status', '')
+  },
+
+  updateNode1Configuration: ({ state }, configuration) => {
+    state.client.send(
+      'node1/update-configuration',
+      JSON.stringify({ data: configuration })
+    )
+    showToast('Configuration updated.')
   },
 }

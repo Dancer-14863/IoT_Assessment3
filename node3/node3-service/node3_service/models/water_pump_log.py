@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, Numeric, TIMESTAMP, sql
 from node3_service.models.base import Base
 
@@ -13,6 +14,7 @@ class WaterPumpLog(Base):
     def __init__(self, pumped_litres, pump_duration):
         self.pumped_litres = pumped_litres
         self.pump_duration = pump_duration
+        self.recorded_at = datetime.now(timezone.utc)
 
     def to_json(self):
         return {

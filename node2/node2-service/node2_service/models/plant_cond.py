@@ -1,4 +1,4 @@
-from email.policy import default
+from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, TIMESTAMP, sql
 from node2_service.models.base import Base
 
@@ -13,6 +13,7 @@ class PlantCond(Base):
     def __init__(self, sensor_reading, status):
         self.sensor_reading = sensor_reading
         self.status = status
+        self.recorded_at = datetime.now(timezone.utc)
         
     def to_json(self):
         return {

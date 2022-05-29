@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import Column, Integer, String, Float, TIMESTAMP, sql
 from weather_lambda.models.base import Base
 
@@ -16,7 +16,7 @@ class WeatherData(Base):
         self.weather_text = weather_text
         self.rain_volume = rain_volume
         self.temperature = temperature
-        self.datetime = self.hour_rounder(datetime.now())
+        self.datetime = self.hour_rounder(datetime.now(timezone.utc))
 
     def to_json(self):
         return {
@@ -28,5 +28,5 @@ class WeatherData(Base):
         }
 
     def hour_rounder(self, t):
-        return (t.replace(second=0, microsecond=0, minute=0, hour=t.hour)
+        return (t.replace(microsecond=0, second=0, minute=0, hour=t.hour)
             +timedelta(hours=t.minute//30))

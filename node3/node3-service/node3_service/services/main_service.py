@@ -117,11 +117,12 @@ class MainService:
                 'message': 'Water Pump is already pumping!',
             }
         }
-        self.mqtt_service.publish('notifications/error', json.dumps(response_object))
+        self.mqtt_service.publish(
+            'notifications/error', json.dumps(response_object))
 
     def __publish_water_pump_log(self, water_pump_log):
         response_object = {
             'data': water_pump_log.to_json()
         }
         self.mqtt_service.publish(
-            'notifications/log', json.dumps(response_object))
+            'notifications/logs', json.dumps(response_object))

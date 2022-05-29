@@ -7,7 +7,14 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ConfigService>(ConfigService);
 
-  const microservice = app.connectMicroservice<MicroserviceOptions>({
+  const microserviceTCP = app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.TCP,
+    options: {
+      port: 3001,
+    },
+  });
+
+  const microserviceMQTT = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.MQTT,
     options: {
       url: configService.get<any>('MQTT_BROKER'),
@@ -18,6 +25,6 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
-  await app.listen(3001);
+  await app.listen(3002);
 }
 bootstrap();

@@ -3,13 +3,19 @@ import { $axios } from '~/utils/api'
 import { MQTTModuleState } from './main'
 import { Node3ConfigurationDTO } from '~/dto/node3_configuration_dto'
 
-export const state = () => ({})
+export const state = () => ({
+  totalWaterPumped: 0,
+})
 
 export type Node3ModuleState = ReturnType<typeof state>
 
 export const getters: GetterTree<Node3ModuleState, MQTTModuleState> = {}
 
-export const mutations: MutationTree<Node3ModuleState> = {}
+export const mutations: MutationTree<Node3ModuleState> = {
+  setTotalWaterPumped: (state, totalWaterPumped) => {
+    state.totalWaterPumped = totalWaterPumped
+  },
+}
 
 export const actions: ActionTree<Node3ModuleState, MQTTModuleState> = {
   fetchConfiguration: async ({ commit }) => {
@@ -22,6 +28,14 @@ export const actions: ActionTree<Node3ModuleState, MQTTModuleState> = {
           root: true,
         }
       )
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  fetchTotalWaterPumped: async ({ commit }) => {
+    try {
+      const response = await $axios.get('node3/water-pump-logs/today/today')
+      commit('setTotalWaterPumped', response.data.total ?? 0)
     } catch (e) {
       console.log(e)
     }

@@ -4,6 +4,9 @@
       <WeatherCard />
     </div>
     <div class="column is-3">
+      <SoilMoistureCard />
+    </div>
+    <div class="column is-3">
       <WaterCard />
     </div>
   </div>
@@ -13,8 +16,9 @@
 import Vue from 'vue'
 import WeatherCard from './WeatherCard.vue'
 import WaterCard from './WaterCard.vue'
+import SoilMoistureCard from './SoilMoistureCard.vue'
 export default Vue.extend({
-  components: { WeatherCard, WaterCard },
+  components: { WeatherCard, WaterCard, SoilMoistureCard },
   name: 'Overview',
 })
 </script>

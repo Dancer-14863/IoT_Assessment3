@@ -26,7 +26,7 @@ export default Vue.extend({
   name: 'Dashboard',
   computed: {
     isConnected(): boolean {
-      return this.$store.state.mqtt.isConnected
+      return this.$store.state.main.isConnected
     },
   },
   async beforeMount() {
@@ -35,7 +35,7 @@ export default Vue.extend({
       this.$store.dispatch('node3/fetchConfiguration'),
       this.$store.dispatch('weather/fetchLatestWeatherData'),
     ])
-    this.$store.dispatch('mqtt/connect')
+    this.$store.dispatch('main/connect')
   },
 })
 </script>

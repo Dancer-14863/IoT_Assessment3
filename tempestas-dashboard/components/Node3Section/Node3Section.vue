@@ -54,7 +54,7 @@ export default Vue.extend({
       litresToPump: 1,
       node3Configuration: {
         litre_per_min:
-          this.$store.state.mqtt.node3Configuration?.litre_per_min ?? 1,
+          this.$store.state.main.node3Configuration?.litre_per_min ?? 1,
       } as Node3ConfigurationDTO,
     }
   },
@@ -62,13 +62,13 @@ export default Vue.extend({
   methods: {
     updateNode3Configuration() {
       this.$store.dispatch(
-        'mqtt/updateNode3Configuration',
+        'main/updateNode3Configuration',
         this.node3Configuration
       )
     },
 
     sendNode3WaterPumpCommand() {
-      this.$store.dispatch('mqtt/sendNode3WaterPumpCommand', this.litresToPump)
+      this.$store.dispatch('main/sendNode3WaterPumpCommand', this.litresToPump)
     },
   },
 })

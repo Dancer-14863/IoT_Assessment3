@@ -1,6 +1,6 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import { $axios } from '~/utils/api'
-import { MQTTModuleState } from './mqtt'
+import { MQTTModuleState } from './main'
 import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
 
 export const state = () => ({})
@@ -16,7 +16,7 @@ export const actions: ActionTree<Node1ModuleState, MQTTModuleState> = {
     try {
       const response = await $axios.get('node1/configuration')
       commit(
-        'mqtt/setNode1Configuration',
+        'main/setNode1Configuration',
         response.data as Node1ConfigurationDTO,
         {
           root: true,

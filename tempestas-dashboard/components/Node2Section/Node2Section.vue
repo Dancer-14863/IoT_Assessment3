@@ -50,7 +50,7 @@ export default Vue.extend({
   },
   methods: {
     sendNode2CoverCommand() {
-      this.$store.dispatch('mqtt/sendNode2CoverCommand', this.coverMode)
+      this.$store.dispatch('main/sendNode2CoverCommand', this.coverMode)
     },
   },
 })

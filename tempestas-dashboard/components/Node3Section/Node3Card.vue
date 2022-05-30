@@ -34,13 +34,13 @@ export default Vue.extend({
   name: 'Node3Card',
   computed: {
     node3Status(): NodeStatusDTO {
-      return this.$store.state.mqtt.node3Status
+      return this.$store.state.main.node3Status
     },
   },
 
   methods: {
     fetchNode3Status() {
-      this.$store.dispatch('mqtt/getNode3Status')
+      this.$store.dispatch('main/getNode3Status')
     },
   },
 })

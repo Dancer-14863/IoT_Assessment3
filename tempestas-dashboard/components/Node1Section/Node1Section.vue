@@ -38,15 +38,15 @@ export default Vue.extend({
   data() {
     return {
       node1Configuration: {
-        min_threshold: this.$store.state.mqtt.node1Configuration?.min_threshold ?? 25,
-        max_threshold: this.$store.state.mqtt.node1Configuration?.max_threshold ?? 75,
+        min_threshold: this.$store.state.main.node1Configuration?.min_threshold ?? 25,
+        max_threshold: this.$store.state.main.node1Configuration?.max_threshold ?? 75,
       } as Node1ConfigurationDTO,
     }
   },
   methods: {
     updateNode1Configuration() {
       this.$store.dispatch(
-        'mqtt/updateNode1Configuration',
+        'main/updateNode1Configuration',
         this.node1Configuration
       )
     },

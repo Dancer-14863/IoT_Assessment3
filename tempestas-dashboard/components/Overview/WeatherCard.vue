@@ -27,7 +27,7 @@ export default Vue.extend({
   name: 'WeatherCard',
   computed: {
     weatherData(): WeatherDataDTO {
-      return this.$store.state.mqtt.weatherData
+      return this.$store.state.main.weatherData
     },
   },
 })

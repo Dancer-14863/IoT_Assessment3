@@ -1,6 +1,6 @@
 import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import { Client } from 'paho-mqtt'
-import { showToast } from '~/utils/toast_helpers'
+import { showNotification } from '~/utils/notification_helpers'
 import { NodeStatusDTO } from '~/dto/node_status_dto'
 import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
 import { Node3ConfigurationDTO } from '~/dto/node3_configuration_dto'
@@ -65,16 +65,16 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
         commit('setClient', client)
         dispatch('_onConnect')
         commit('setIsConnected', true)
-        showToast('Connected to MQTT Broker')
+        showNotification('Connected to MQTT Broker')
       },
       onFailure: () => {
-        showToast('Could not connect to MQTT Broker', 'is-error')
+        showNotification('Could not connect to MQTT Broker', 'is-error')
       },
     })
   },
 
   _onConnect: ({ state, commit }) => {
-    state.client.subscribe('website/#')
+    state.client.subscribe('api/#')
     state.client.subscribe('node1/#')
     state.client.subscribe('node2/#')
     state.client.subscribe('node3/#')
@@ -82,7 +82,7 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
 
     state.client.onConnectionLost = (responseObject) => {
       if (responseObject.errorCode !== 0) {
-        showToast(
+        showNotification(
           `Connection to MQTT Broker lost: ${responseObject.errorMessage}`,
           'is-error'
         )
@@ -92,39 +92,43 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
     state.client.onMessageArrived = (message) => {
       let parsedData
       switch (message.destinationName) {
+        case 'api/notifications':
+          parsedData = JSON.parse(message.payloadString)
+          showNotification(parsedData.data.message, 'is-info')
+          break
         case 'weather/latest':
           parsedData = JSON.parse(message.payloadString)
           commit('setWeatherData', parsedData.data as WeatherDataDTO)
-          showToast('Weather Data has been updated', 'is-info')
+          showNotification('Weather Data has been updated', 'is-info')
           break
         case 'node1/status':
           parsedData = JSON.parse(message.payloadString)
           commit('setNode1Status', parsedData.data as NodeStatusDTO)
-          showToast('Soil Moisture Node status has been updated')
+          showNotification('Soil Moisture Node status has been updated')
           break
         case 'node2/status':
           parsedData = JSON.parse(message.payloadString)
           commit('setNode2Status', parsedData.data as NodeStatusDTO)
-          showToast('Plant Cover Node status has been updated')
+          showNotification('Plant Cover Node status has been updated')
           break
         case 'node2/notifications/error':
           parsedData = JSON.parse(message.payloadString)
-          showToast(parsedData.message, 'is-danger')
+          showNotification(parsedData.message, 'is-danger')
           break
         case 'node3/status':
           parsedData = JSON.parse(message.payloadString)
           commit('setNode3Status', parsedData.data as NodeStatusDTO)
-          showToast('Water Pump Node status has been updated')
+          showNotification('Water Pump Node status has been updated')
           break
         case 'node3/notifications/logs':
           parsedData = JSON.parse(message.payloadString)
-          showToast(
+          showNotification(
             `Water pump has finished pumping ${parsedData.data.pumped_litres} litre(s)`
           )
           break
         case 'node3/notifications/error':
           parsedData = JSON.parse(message.payloadString)
-          showToast(parsedData.data.message, 'is-danger')
+          showNotification(parsedData.data.message, 'is-danger')
           break
       }
     }
@@ -147,7 +151,7 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
       'node1/update-configuration',
       JSON.stringify({ data: configuration })
     )
-    showToast('Configuration updated.')
+    showNotification('Configuration updated.')
   },
 
   sendNode2CoverCommand: ({ state }, command) => {
@@ -155,7 +159,7 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
       'node2/cover-commands',
       JSON.stringify({ data: { cover_command: command } })
     )
-    showToast('Command Sent')
+    showNotification('Command Sent')
   },
 
   sendNode3WaterPumpCommand: ({ state }, litres) => {
@@ -163,7 +167,7 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
       'node3/water-pump-commands',
       JSON.stringify({ data: { litres_to_pump: litres } })
     )
-    showToast('Command Sent')
+    showNotification('Command Sent')
   },
 
   updateNode3Configuration: ({ state }, configuration) => {
@@ -171,7 +175,7 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
       'node3/update-configuration',
       JSON.stringify({ data: configuration })
     )
-    showToast('Configuration updated.')
+    showNotification('Configuration updated.')
   },
 
   sendDebugCommand: ({ state }, weatherCode) => {

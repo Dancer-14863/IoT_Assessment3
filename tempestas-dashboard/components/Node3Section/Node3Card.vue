@@ -16,7 +16,7 @@
         </div>
         <div class="is-flex is-justify-content-space-between">
           <p class="has-text-weight-bold">Online Since</p>
-          <p>{{ node3Status.up_date_time }}</p>
+          <p>{{ node3Status.up_date_time | toDateTimeString }}</p>
         </div>
         <div class="is-flex is-justify-content-space-between">
           <p class="has-text-weight-bold">Last Recorded Status</p>
@@ -30,8 +30,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { NodeStatusDTO } from '~/dto/node_status_dto'
+import { toDateTimeString } from '~/utils/filters/date_time_string'
 export default Vue.extend({
   name: 'Node3Card',
+  filters: { toDateTimeString },
   computed: {
     node3Status(): NodeStatusDTO {
       return this.$store.state.main.node3Status

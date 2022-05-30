@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 from node1_service.services.database_service import DatabaseService
 from node1_service.services.mqtt_service import MQTTService
@@ -17,7 +17,7 @@ class MainService:
 
     #  Hardcoded device information
     device_id = '0001'
-    service_start_date_time = datetime.now()
+    service_start_date_time = datetime.now(timezone.utc)
 
     def __init__(self, database_service: DatabaseService, mqtt_service: MQTTService):
         self.database_service = database_service

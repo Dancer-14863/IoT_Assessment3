@@ -7,12 +7,14 @@ class WeatherData(Base):
     __tablename__ = "weather_data"
 
     id = Column(Integer, primary_key=True)
+    weather_code = Column(Integer, default=0)
     weather_text = Column(String(24), default="")
     rain_volume = Column(Float, default=0)
     temperature = Column(Float, default=0)
     datetime = Column(TIMESTAMP, server_default=sql.func.now())
 
-    def __init__(self, weather_text, rain_volume, temperature):
+    def __init__(self, weather_code, weather_text, rain_volume, temperature):
+        self.weather_code = weather_code
         self.weather_text = weather_text
         self.rain_volume = rain_volume
         self.temperature = temperature
@@ -21,6 +23,7 @@ class WeatherData(Base):
     def to_json(self):
         return {
             "id": self.id,
+            "weather_code": self.weather_code,
             "weather_text": self.weather_text,
             "rain_volume": self.rain_volume,
             "temperature": self.temperature,
@@ -29,4 +32,4 @@ class WeatherData(Base):
 
     def hour_rounder(self, t):
         return (t.replace(microsecond=0, second=0, minute=0, hour=t.hour)
-            +timedelta(hours=t.minute//30))
+                + timedelta(hours=t.minute//30))

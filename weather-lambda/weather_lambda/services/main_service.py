@@ -18,6 +18,7 @@ class MainService:
     def run(self):
         # get weather data
         response = requests.get(self.URL).json()
+        weather_code = response["weather"][0]["id"]
         weather_text = response["weather"][0]["main"]
         rain_volume = 0
         if ("rain" in response):
@@ -25,8 +26,9 @@ class MainService:
         temperature = response["main"]["temp"]
 
         # store in rds
-        weather_data = self.database_service.save_weather_data(weather_text, rain_volume, temperature)
-        
+        weather_data = self.database_service.save_weather_data(
+            weather_code, weather_text, rain_volume, temperature)
+
         # publish to MQTT
         self.mqtt_service.start()
         self.mqtt_service.set_base_topic("weather")

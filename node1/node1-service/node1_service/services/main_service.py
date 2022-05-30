@@ -69,9 +69,7 @@ class MainService:
                 status = 'ABOVE THRESHOLD'
             sensor_log = self.database_service.save_sensor_reading(
                 sensor_reading, status)
-
-            if (sensor_log.status != 'NORMAL'):
-                self.__publish_sensor_log(sensor_log)
+            self.__publish_sensor_log(sensor_log)
 
             print(f'Sensor Reading: {sensor_reading}')
 

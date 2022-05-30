@@ -173,4 +173,15 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
     )
     showToast('Configuration updated.')
   },
+
+  sendDebugCommand: ({ state }, weatherCode) => {
+    const debugData = {
+      weather_code: +weatherCode,
+      weather_text: '',
+      rain_volume: 0.0,
+      temperature: 0.0,
+      datetime: '',
+    }
+    state.client.send('weather/latest', JSON.stringify({ data: debugData }))
+  },
 }

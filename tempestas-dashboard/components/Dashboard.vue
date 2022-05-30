@@ -15,6 +15,9 @@
       <b-tab-item label="Node 3">
         <Node3Section />
       </b-tab-item>
+      <b-tab-item label="Debug">
+        <DebugSection />
+      </b-tab-item>
     </b-tabs>
   </main>
 </template>

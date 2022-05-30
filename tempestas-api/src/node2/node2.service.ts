@@ -38,4 +38,22 @@ export class Node2Service implements OnModuleInit {
   async fetchCoverLogs() {
     return await this.node2CoverLogRepository.find();
   }
+
+  changeToNoCover() {
+    this.client.emit('node2/cover-commands', {
+      cover_command: 'NO_COVER',
+    });
+  }
+
+  changeToFullCover() {
+    this.client.emit('node2/cover-commands', {
+      cover_command: 'FULL_COVER',
+    });
+  }
+
+  changeToPartialCover() {
+    this.client.emit('node2/cover-commands', {
+      cover_command: 'PARTIAL_COVER',
+    });
+  }
 }

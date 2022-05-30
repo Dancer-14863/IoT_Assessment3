@@ -9,5 +9,6 @@ import { Node3WaterPumpLog } from './entities/node3-water-pump-log.entity';
   imports: [TypeOrmModule.forFeature([Node3Configuration, Node3WaterPumpLog])],
   controllers: [Node3Controller],
   providers: [Node3Service],
+  exports: [Node3Service],
 })
 export class Node3Module {}

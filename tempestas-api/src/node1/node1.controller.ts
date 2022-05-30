@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Inject } from '@nestjs/common';
 import {
   Ctx,
   MessagePattern,
@@ -14,7 +14,11 @@ export class Node1Controller {
   constructor(private readonly node1Service: Node1Service) {}
 
   @MessagePattern('node1/notifications/logs')
-  getLogsFromNotifications(@Payload() data: Node1SensorLogDTO, @Ctx() context: MqttContext) {
+  async getLogsFromNotifications(
+    @Payload() data: Node1SensorLogDTO,
+    @Ctx() context: MqttContext,
+  ) {
+    await this.node1Service.processSoilMoisture(data);
     return this.node1Service.saveSoilMoistureLog(data);
   }
 

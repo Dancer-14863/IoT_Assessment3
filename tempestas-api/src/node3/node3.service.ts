@@ -7,7 +7,7 @@ import { Node3ConfigurationDTO } from './dto/node3-configuration.dto';
 import { Node3WaterPumpLogDTO } from './dto/node3-water-pump-log.dto';
 import { Node3Configuration } from './entities/node3-configuration.entity';
 import { Node3WaterPumpLog } from './entities/node3-water-pump-log.entity';
-import * as moment from 'moment';
+import { startOfDay, endOfDay } from 'date-fns';
 
 @Injectable()
 export class Node3Service implements OnModuleInit {
@@ -44,20 +44,20 @@ export class Node3Service implements OnModuleInit {
     return await this.node3WaterPumpLogRepository.find();
   }
 
-  async fetchWaterPumpLogsAverage() {
-    const logs: Node3WaterPumpLog[] = await this.node3WaterPumpLogRepository.find({
-      where: {
-        recorded_at: Between(
-          moment(new Date()).format('YYYY-MM-DD 00:00'),
-          moment(new Date()).format('YYYY-MM-DD 23:59'),
-        ),
-      },
-    });
+  async fetchWaterPumpLogsTotal() {
+    const logs: Node3WaterPumpLog[] =
+      await this.node3WaterPumpLogRepository.find({
+        where: {
+          recorded_at: Between(
+            startOfDay(new Date()).toISOString(),
+            endOfDay(new Date()).toISOString(),
+          ),
+        },
+      });
     return {
-      average: +(
-        logs.reduce((sum, { pumped_litres }) => sum + pumped_litres, 0) /
-        logs.length
-      ).toFixed(2),
+      total: +logs
+        .reduce((sum, { pumped_litres }) => sum + pumped_litres, 0)
+        .toFixed(2),
     };
   }
 }

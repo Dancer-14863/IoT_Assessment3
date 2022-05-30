@@ -13,6 +13,7 @@ import { Node2HeightLog } from './node2/entities/node2-height-log.entity';
 import { Node3Configuration } from './node3/entities/node3-configuration.entity';
 import { Node3WaterPumpLog } from './node3/entities/node3-water-pump-log.entity';
 import { Node3Module } from './node3/node3.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { Node3Module } from './node3/node3.module';
     WeatherModule,
     Node2Module,
     Node3Module,
+    ScheduleModule.forRoot()
   ],
   providers: [
     {

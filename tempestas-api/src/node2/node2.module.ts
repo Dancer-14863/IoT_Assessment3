@@ -9,5 +9,6 @@ import { Node2HeightLog } from './entities/node2-height-log.entity';
   imports: [TypeOrmModule.forFeature([Node2CoverLog, Node2HeightLog])],
   controllers: [Node2Controller],
   providers: [Node2Service],
+  exports: [Node2Service],
 })
 export class Node2Module {}

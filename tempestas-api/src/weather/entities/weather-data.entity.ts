@@ -6,6 +6,9 @@ export class WeatherData {
   @PrimaryGeneratedColumn()
   public id: number;
 
+  @Column({ name: 'weather_code' })
+  public weather_code: number;
+
   @Column({ name: 'weather_text' })
   public weather_text: string;
 

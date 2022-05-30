@@ -39,8 +39,8 @@ export class Node3Controller {
     return this.node3Service.fetchWaterPumpLogs();
   }
 
-  @Get('water-pump-logs/average/today')
-  getWaterPumpLogsAverage() {
-    return this.node3Service.fetchWaterPumpLogsAverage();
+  @Get('water-pump-logs/total/today')
+  getWaterPumpLogsTotal() {
+    return this.node3Service.fetchWaterPumpLogsTotal();
   }
 }

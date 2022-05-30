@@ -2,7 +2,7 @@ from node3_service.services.database_service import DatabaseService
 from node3_service.utils.arduino_helpers import find_arduino, send_command_arduino
 from node3_service.services.mqtt_service import MQTTService
 from node3_service.utils.commands import Commands
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 import serial
 import time
@@ -16,7 +16,7 @@ class MainService:
     configuration = None
 
     device_id = '0003'
-    service_start_date_time = datetime.now()
+    service_start_date_time = datetime.now(timezone.utc)
 
     is_water_pump_on = False
     litres_to_pump = 0.0

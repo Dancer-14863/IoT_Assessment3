@@ -15,7 +15,7 @@ export class Node1Controller {
 
   @MessagePattern('node1/notifications/logs')
   getLogsFromNotifications(@Payload() data: Node1SensorLogDTO, @Ctx() context: MqttContext) {
-    return this.node1Service.saveNode1SensorLog(data);
+    return this.node1Service.saveSoilMoistureLog(data);
   }
 
   @MessagePattern('node1/update-configuration')
@@ -31,8 +31,13 @@ export class Node1Controller {
     return this.node1Service.fetchConfiguration();
   }
 
-  @Get('sensor-logs')
+  @Get('soil-moisture-logs')
   getSensorLogs() {
-    return this.node1Service.fetchSensorLogs();
+    return this.node1Service.fetchSoilMoistureLogs();
+  }
+
+  @Get('soil-moisture-logs/average/today')
+  getSensorLogsAverage() {
+    return this.node1Service.fetchAverageSoilMoisture();
   }
 }

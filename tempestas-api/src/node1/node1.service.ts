@@ -53,6 +53,9 @@ export class Node1Service implements OnModuleInit {
     if (soilMoistureLog.status === 'BELOW THRESHOLD') {
       if (isLightRain) {
         this.node2Service.changeToNoCover();
+        this.sendNotification(
+          'Cover has been opened, to increase soil moisture during rain',
+        );
       } else if (!this.isWaterPumpOn) {
         let litrePerMin;
         try {
@@ -74,12 +77,18 @@ export class Node1Service implements OnModuleInit {
         this.schedulerRegistry.addTimeout('soil-moisture-timeout', timeout);
         this.isWaterPumpOn = true;
         this.client.emit('node3/water-pump-commands', { litres_to_pump: 1 });
+        this.sendNotification(
+          'Water pump has been turned on, due to low soil moisture',
+        );
       }
     } else if (soilMoistureLog.status === 'ABOVE THRESHOLD') {
       if (isHeavyRain || isLightRain) {
         this.node2Service.changeToFullCover();
       } else {
         this.node2Service.changeToNoCover();
+        this.sendNotification(
+          'Cover has been opened, to get rid of excess soil moisture',
+        );
       }
     } else {
       if (isHeavyRain) {
@@ -88,6 +97,10 @@ export class Node1Service implements OnModuleInit {
         this.node2Service.changeToPartialCover();
       }
     }
+  }
+
+  sendNotification(message: string) {
+    this.client.emit('api/notifications', { message: message });
   }
 
   async fetchConfiguration() {

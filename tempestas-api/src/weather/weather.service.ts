@@ -26,6 +26,7 @@ export class WeatherService implements OnModuleInit {
     const isHeavyRain: boolean = await this.isHeavyRain(data);
     if (isHeavyRain) {
       this.node2Service.changeToFullCover();
+      this.sendNotification('Cover has been fully closed due to bad weather');
     }
   }
 
@@ -37,6 +38,10 @@ export class WeatherService implements OnModuleInit {
 
   async fetchAllWeatherData() {
     return await this.weatherDataRepository.find();
+  }
+
+  sendNotification(message: string) {
+    this.client.emit('api/notifications', { message: message });
   }
 
   async isHeavyRain(data?: WeatherDataDTO) {

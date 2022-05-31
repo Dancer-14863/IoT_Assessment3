@@ -22,6 +22,10 @@ export class WeatherService implements OnModuleInit {
     this.client = this.moduleRef.get('MQTT_SERVICE', { strict: false });
   }
 
+  saveWeatherLog(weatherLog: WeatherDataDTO) {
+    return this.weatherDataRepository.save(weatherLog);
+  }
+
   async processWeatherData(data: WeatherDataDTO) {
     const isHeavyRain: boolean = await this.isHeavyRain(data);
     if (isHeavyRain) {

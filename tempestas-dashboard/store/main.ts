@@ -190,11 +190,12 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
   sendDebugCommand: ({ state }, weatherCode) => {
     const debugData = {
       weather_code: +weatherCode,
-      weather_text: 'Clouds',
+      weather_text: 'Debug Weather',
       rain_volume: 0.0,
       temperature: 25.0,
-      datetime: '',
+      datetime: new Date().toUTCString(),
     }
+    state.client.send('weather/debug', JSON.stringify({ data: debugData }))
     state.client.send('weather/latest', JSON.stringify({ data: debugData }))
   },
 }

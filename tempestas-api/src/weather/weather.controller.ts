@@ -21,6 +21,14 @@ export class WeatherController {
     await this.weatherService.processWeatherData(data);
   }
 
+  @MessagePattern('weather/debug')
+  async getDebugLogsFromNotifications(
+    @Payload() data: WeatherDataDTO,
+    @Ctx() context: MqttContext,
+  ) {
+    await this.weatherService.saveWeatherLog(data);
+  }
+
   @Get('latest')
   getLatestWeatherData() {
     return this.weatherService.fetchLatestWeatherData();

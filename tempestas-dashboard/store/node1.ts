@@ -3,10 +3,10 @@ import { $axios } from '~/utils/api'
 import { MQTTModuleState } from './main'
 import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
 import { Node1SensorLogDTO } from '~/dto/node1_sensor_log_dto'
-import moment from 'moment'
 
 export const state = () => ({
   averageSoilMoisture: 0,
+  soilMoistureLogs: [] as Node1SensorLogDTO[],
 })
 
 export type Node1ModuleState = ReturnType<typeof state>
@@ -16,6 +16,9 @@ export const getters: GetterTree<Node1ModuleState, MQTTModuleState> = {}
 export const mutations: MutationTree<Node1ModuleState> = {
   setAverageSoilMoisture: (state, averageSoilMoisture) => {
     state.averageSoilMoisture = averageSoilMoisture
+  },
+  setSoilMoistureLogs: (state, soilMoistureLogs) => {
+    state.soilMoistureLogs = soilMoistureLogs
   },
 }
 
@@ -38,7 +41,7 @@ export const actions: ActionTree<Node1ModuleState, MQTTModuleState> = {
   fetchAllSensorLogs: async ({ commit }) => {
     try {
       const response = await $axios.get('node1/soil-moisture-logs')
-      const dataList: Node1SensorLogDTO[] = response.data
+      commit('setSoilMoistureLogs', response.data as Node1SensorLogDTO[])
     } catch (e) {
       console.log(e)
     }

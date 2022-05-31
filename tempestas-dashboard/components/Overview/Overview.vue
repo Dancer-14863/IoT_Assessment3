@@ -15,6 +15,9 @@
       <div class="column is-6">
         <SoilMoistureChart />
       </div>
+      <div class="column is-6">
+        <WaterPumpChart />
+      </div>
     </div>
   </div>
 </template>
@@ -25,8 +28,15 @@ import WeatherCard from './WeatherCard.vue'
 import WaterCard from './WaterCard.vue'
 import SoilMoistureCard from './SoilMoistureCard.vue'
 import SoilMoistureChart from './Charts/SoilMoistureChart.vue'
+import WaterPumpChart from './Charts/WaterPumpChart.vue'
 export default Vue.extend({
-  components: { WeatherCard, WaterCard, SoilMoistureCard, SoilMoistureChart },
+  components: {
+    WeatherCard,
+    WaterCard,
+    SoilMoistureCard,
+    SoilMoistureChart,
+    WaterPumpChart,
+  },
   name: 'Overview',
 })
 </script>

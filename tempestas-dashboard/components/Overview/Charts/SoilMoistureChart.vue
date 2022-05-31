@@ -60,16 +60,10 @@ export default Vue.extend({
           min: 0,
           title: { text: 'Soil Moisture %' },
         },
-        animations: {
-          enabled: true,
-          easing: 'linear',
-          dynamicAnimation: {
-            speed: 1000,
-          },
-        },
         tooltip: {
           enabled: false,
         },
+        colors: ['#7957D5'],
       },
       chartSeries: [
         {

@@ -38,6 +38,8 @@ export default Vue.extend({
       this.$store.dispatch('node1/fetchConfiguration'),
       this.$store.dispatch('node1/fetchAverageSoilMoisture'),
       this.$store.dispatch('node3/fetchConfiguration'),
+      this.$store.dispatch('node3/fetchAllWaterPumpLogs'),
+      this.$store.dispatch('node3/fetchAllWaterPumpLogsOfWeek'),
       this.$store.dispatch('node3/fetchTotalWaterPumped'),
       this.$store.dispatch('weather/fetchLatestWeatherData'),
     ])

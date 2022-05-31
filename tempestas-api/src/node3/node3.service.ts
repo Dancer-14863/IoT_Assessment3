@@ -7,7 +7,7 @@ import { Node3ConfigurationDTO } from './dto/node3-configuration.dto';
 import { Node3WaterPumpLogDTO } from './dto/node3-water-pump-log.dto';
 import { Node3Configuration } from './entities/node3-configuration.entity';
 import { Node3WaterPumpLog } from './entities/node3-water-pump-log.entity';
-import { startOfDay, endOfDay } from 'date-fns';
+import { startOfDay, endOfDay, startOfWeek, endOfWeek } from 'date-fns';
 
 @Injectable()
 export class Node3Service implements OnModuleInit {
@@ -42,6 +42,14 @@ export class Node3Service implements OnModuleInit {
 
   async fetchWaterPumpLogs() {
     return await this.node3WaterPumpLogRepository.find();
+  }
+
+  async fetchWaterPumpLogsOfWeek() {
+    return await this.node3WaterPumpLogRepository.find({
+      where: {
+        recorded_at: Between(startOfWeek(new Date()), endOfWeek(new Date())),
+      },
+    });
   }
 
   async fetchWaterPumpLogsTotal() {

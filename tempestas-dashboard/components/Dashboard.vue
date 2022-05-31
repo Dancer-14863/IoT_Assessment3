@@ -34,6 +34,7 @@ export default Vue.extend({
   },
   async beforeMount() {
     await Promise.all([
+      this.$store.dispatch('node1/fetchAllSensorLogs'),
       this.$store.dispatch('node1/fetchConfiguration'),
       this.$store.dispatch('node1/fetchAverageSoilMoisture'),
       this.$store.dispatch('node3/fetchConfiguration'),

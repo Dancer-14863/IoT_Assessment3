@@ -2,6 +2,8 @@ import { GetterTree, ActionTree, MutationTree } from 'vuex'
 import { $axios } from '~/utils/api'
 import { MQTTModuleState } from './main'
 import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
+import { Node1SensorLogDTO } from '~/dto/node1_sensor_log_dto'
+import moment from 'moment'
 
 export const state = () => ({
   averageSoilMoisture: 0,
@@ -32,6 +34,16 @@ export const actions: ActionTree<Node1ModuleState, MQTTModuleState> = {
       console.log(e)
     }
   },
+
+  fetchAllSensorLogs: async ({ commit }) => {
+    try {
+      const response = await $axios.get('node1/soil-moisture-logs')
+      const dataList: Node1SensorLogDTO[] = response.data
+    } catch (e) {
+      console.log(e)
+    }
+  },
+
   fetchAverageSoilMoisture: async ({ commit }) => {
     try {
       const response = await $axios.get(

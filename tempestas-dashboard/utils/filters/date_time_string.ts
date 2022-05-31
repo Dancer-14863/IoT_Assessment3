@@ -5,5 +5,5 @@ export function toDateTimeString(date: Date | string): string {
   if (typeof date === 'string') {
     date = new Date(`${date} UTC`)
   }
-  return moment(date).format('H:mm:ss DD-MM-YYYY')
+  return moment(date).format('HH:mm:ss DD-MM-YYYY')
 }

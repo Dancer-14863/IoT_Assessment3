@@ -5,6 +5,7 @@ import { NodeStatusDTO } from '~/dto/node_status_dto'
 import { Node1ConfigurationDTO } from '~/dto/node1_configuration_dto'
 import { Node3ConfigurationDTO } from '~/dto/node3_configuration_dto'
 import { WeatherDataDTO } from '~/dto/weather_data_dto'
+import { Node1SensorLogDTO } from '~/dto/node1_sensor_log_dto'
 
 export const state = () => ({
   client: {} as Client,
@@ -15,6 +16,7 @@ export const state = () => ({
   node1Configuration: {} as Node1ConfigurationDTO,
   node3Configuration: {} as Node3ConfigurationDTO,
   weatherData: {} as WeatherDataDTO,
+  soilMoistureCallback: Function,
 })
 
 export type MQTTModuleState = ReturnType<typeof state>
@@ -45,6 +47,9 @@ export const mutations: MutationTree<MQTTModuleState> = {
   },
   setWeatherData: (state, weatherData) => {
     state.weatherData = weatherData
+  },
+  setSoilMoistureCallback: (state, callback) => {
+    state.soilMoistureCallback = callback
   },
 }
 
@@ -101,6 +106,10 @@ export const actions: ActionTree<MQTTModuleState, MQTTModuleState> = {
           commit('setWeatherData', parsedData.data as WeatherDataDTO)
           showNotification('Weather Data has been updated', 'is-info')
           break
+        case 'node1/notifications/logs':
+          parsedData = JSON.parse(message.payloadString)
+          state.soilMoistureCallback(parsedData.data);
+          break;
         case 'node1/status':
           parsedData = JSON.parse(message.payloadString)
           commit('setNode1Status', parsedData.data as NodeStatusDTO)
